@@ -4,7 +4,6 @@ FROM debian:buster
 RUN apt-get update && apt-get install -y nginx
 
 # install openssl
-
 RUN	apt-get install openssl
 
 # generate a private key and (CSR)
@@ -18,6 +17,3 @@ RUN	openssl req -x509 -newkey rsa:2048 -sha256 -days 356 \
 COPY conf/nginx.conf /etc/nginx/nginx.conf
 
 ENTRYPOINT ["/usr/sbin/nginx", "-g", "daemon off;"]
-
-
-# /etc/php/7.3/fpm/pool.d/www.conf 

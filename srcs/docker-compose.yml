@@ -1,26 +1,35 @@
 version: '3'
 services:
   nginx:
-    build: 
+    build:
       context: requirements/nginx
       dockerfile: Dockerfile
     container_name: nginx
     ports:
       - "80:80"
       - "443:443"
+    volumes:
+      - /Users/hhamdy/Desktop/inception1/volumes:/var/www/html
     networks:
       - inception
   wordpress:
-    build: 
+    build:
       context: requirements/wordpress
       dockerfile: Dockerfile
     container_name: wordpress
-    # volumes:
-    #   - wp:/var/www/html/
+    volumes:
+      - /Users/hhamdy/Desktop/inception1/volumes:/var/www/html
     ports:
       - "9000:9000"
     networks:
       - inception
 
+volumes:
+  volumes:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /Users/hhamdy/Desktop/inception1/volumes
 networks:
   inception:
