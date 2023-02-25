@@ -11,7 +11,10 @@ services:
     networks:
       - inception
     volumes:
-      - db:/var/www/html
+      - wordpress:/var/www/html
+    depends_on:
+      - wordpress
+
   wordpress:
     build:
       context: requirements/wordpress
@@ -19,10 +22,15 @@ services:
     container_name: wordpress
     ports:
       - "9000:9000"
+    env_file:
+      - /Users/hhamdy/Desktop/inception1/srcs/.env
     volumes:
-      - db:/var/www/html
+      - wordpress:/var/www/html
     networks:
       - inception
+    depends_on:
+      - mariadb
+
   mariadb:
     build:
       context: requirements/mariadb
@@ -30,14 +38,24 @@ services:
     container_name: mariadb
     networks:
       - inception
+    env_file:
+      - /Users/hhamdy/Desktop/inception1/srcs/.env
+    volumes:
+      - mariadb:/var/lib/mysql
 
 networks:
   inception:
+
 volumes:
-  db:
+  wordpress:
     driver: local
     driver_opts:
       device: /Users/hhamdy/Desktop/inception1/volumes
       o:  bind
       type: none
-  
+  mariadb:
+    driver: local
+    driver_opts:
+      device: /Users/hhamdy/Desktop/inception1/mariadb
+      o:  bind
+      type: none

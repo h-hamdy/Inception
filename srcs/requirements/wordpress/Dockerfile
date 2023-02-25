@@ -16,8 +16,7 @@ COPY info.php .
 
 COPY conf/php-fpm.conf /etc/php/7.3/fpm/php-fpm.conf
 
-COPY conf/wp-config.php .
-#wordpress/wp-config-sample.php
+COPY conf/wp-config.php wordpress/
 
 RUN  service php7.3-fpm start
 
