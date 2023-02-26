@@ -1,9 +1,13 @@
 FROM debian:buster
-RUN apt-get update
-RUN apt-get install mariadb-server -y
-RUN mkdir /run/mysqld
-RUN chown mysql:mysql /run/mysqld
-COPY conf/script.sh .
-RUN chmod +x script.sh
+
+RUN apt update && apt -y install mariadb-server && service mysql start
+
+COPY conf/50-server.cnf /etc/mysql/mariadb.conf.d/50-server.cnf
+
+COPY conf/script.sh /
+
+COPY conf/my.cnf /etc/mysql/conf.d/my.cnf
+
+RUN	chmod +x script.sh
+
 ENTRYPOINT ["./script.sh"]
-CMD ["mysqld", "--bind_address=*"]

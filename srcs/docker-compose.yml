@@ -1,61 +1,53 @@
-version: '3'
+version: "3.3"
 services:
   nginx:
-    build:
-      context: requirements/nginx
-      dockerfile: Dockerfile
+    build: ./requirements/Nginx
     container_name: nginx
+    image: nginx
     ports:
-      - "80:80"
-      - "443:443"
+      - 443:443
+    volumes:
+      - wp:/var/www/html/wordpress
     networks:
       - inception
-    volumes:
-      - wordpress:/var/www/html
     depends_on:
-      - wordpress
+       - wordpress
 
   wordpress:
-    build:
-      context: requirements/wordpress
-      dockerfile: Dockerfile
+    build: ./requirements/Wordpress
+    image: wordpress
     container_name: wordpress
-    ports:
-      - "9000:9000"
-    env_file:
-      - /Users/hhamdy/Desktop/inception1/srcs/.env
-    volumes:
-      - wordpress:/var/www/html
     networks:
       - inception
+    volumes: 
+      - wp:/var/www/html/wordpress
+    env_file:
+    - .env
     depends_on:
-      - mariadb
-
+        - mariadb
   mariadb:
-    build:
-      context: requirements/mariadb
-      dockerfile: Dockerfile
+    build: ./requirements/MariaDB
     container_name: mariadb
+    image: mariadb
     networks:
       - inception
-    env_file:
-      - /Users/hhamdy/Desktop/inception1/srcs/.env
     volumes:
-      - mariadb:/var/lib/mysql
+      - db:/var/lib/mysql
+    env_file:
+      - .env
 
 networks:
   inception:
-
 volumes:
-  wordpress:
+  wp:
     driver: local
     driver_opts:
       device: /Users/hhamdy/Desktop/inception1/volumes
-      o:  bind
-      type: none
-  mariadb:
+      o: bind
+      type: bind
+  db:
     driver: local
     driver_opts:
       device: /Users/hhamdy/Desktop/inception1/mariadb
-      o:  bind
-      type: none
+      o: bind
+      type: bind

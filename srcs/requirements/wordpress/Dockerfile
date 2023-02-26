@@ -12,12 +12,16 @@ RUN wget https://wordpress.org/latest.zip && unzip latest.zip
 
 RUN rm -f latest.zip
 
-COPY info.php .
+COPY conf/db.sh .
+
+RUN	chmod +x db.sh
 
 COPY conf/php-fpm.conf /etc/php/7.3/fpm/php-fpm.conf
 
-COPY conf/wp-config.php wordpress/
+COPY conf/wp-config.php .
 
 RUN  service php7.3-fpm start
 
-CMD ["/usr/sbin/php-fpm7.3", "-F", "-R"]
+ENTRYPOINT [ "sh", "db.sh" ]
+
+#CMD ["/usr/sbin/php-fpm7.3", "-F", "-R"]
