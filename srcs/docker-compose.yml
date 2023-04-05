@@ -7,11 +7,13 @@ services:
     ports:
       - 443:443
     volumes:
-      - wp:/var/www/html/wordpress
+      - wp:/var/www/html/
     networks:
       - inception
     depends_on:
        - wordpress
+    init: true
+    restart: always
 
   wordpress:
     build: ./requirements/Wordpress
@@ -20,21 +22,94 @@ services:
     networks:
       - inception
     volumes: 
-      - wp:/var/www/html/wordpress
+      - wp:/var/www/html/
     env_file:
     - .env
     depends_on:
         - mariadb
+    init: true
+    restart: always
+
   mariadb:
     build: ./requirements/MariaDB
     container_name: mariadb
     image: mariadb
+    init: true
     networks:
       - inception
     volumes:
       - db:/var/lib/mysql
     env_file:
       - .env
+    restart: always
+
+  redis:
+    build: ./requirements/bonus/redis
+    container_name: redis
+    image: redis
+    networks:
+      - inception
+    volumes:
+      - rs:/var/www/html
+    depends_on:
+      - wordpress
+    init: true
+    restart: always
+  
+  adminer:
+    build: ./requirements/bonus/adminer
+    container_name: adminer
+    image: adminer
+    networks:
+      - inception
+    depends_on:
+      - mariadb
+    ports:
+      - 8000:8000
+    init: true
+    restart: always
+
+  cadvisor:
+    build: ./requirements/bonus/cadvisor
+    container_name: cadvisor
+    image: cadvisor
+    networks:
+      - inception
+    ports:
+      - 8080:8080
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:rw
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+    restart: always
+
+  ftp:
+    build: ./requirements/bonus/ftp
+    container_name: ftp
+    image: ftp
+    networks:
+    - inception
+    ports:
+      - "21:21"
+      - "40000-40100:40000-40100"
+    depends_on:
+      - wordpress
+    volumes:
+      - wp:/content
+    restart: always
+    
+  web_site:
+    build: ./requirements/bonus/web_site
+    container_name: web_site
+    image: web_site
+    networks:
+      - inception
+    ports:
+      - 3000:3000
+    restart: always
+
+    
 
 networks:
   inception:
@@ -42,12 +117,18 @@ volumes:
   wp:
     driver: local
     driver_opts:
-      device: /Users/hhamdy/Desktop/inception1/volumes
+      device: /Users/hhamdy/Desktop/inception/volumes
       o: bind
       type: bind
   db:
     driver: local
     driver_opts:
-      device: /Users/hhamdy/Desktop/inception1/mariadb
+      device: /Users/hhamdy/Desktop/inception/mariadb
+      o: bind
+      type: bind
+  rs:
+    driver: local
+    driver_opts:
+      device: /Users/hhamdy/Desktop/inception/mariadb
       o: bind
       type: bind

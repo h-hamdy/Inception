@@ -6,7 +6,7 @@ RUN	apt-get install -y php7.3-fpm php-mysql
 
 RUN apt-get install wget unzip -y
 
-WORKDIR /var/www/html/
+WORKDIR /var/www/html
 
 RUN wget https://wordpress.org/latest.zip && unzip latest.zip
 
@@ -20,7 +20,7 @@ COPY conf/php-fpm.conf /etc/php/7.3/fpm/php-fpm.conf
 
 COPY conf/wp-config.php .
 
-RUN  service php7.3-fpm start
+RUN service php7.3-fpm start
 
 ENTRYPOINT [ "sh", "db.sh" ]
 
