@@ -1,8 +1,8 @@
 version: "3.3"
 services:
   nginx:
-    build: ./requirements/Nginx
-    container_name: nginx
+    build: ./requirements/nginx
+    container_name: nginx 
     image: nginx
     ports:
       - 443:443
@@ -16,7 +16,7 @@ services:
     restart: always
 
   wordpress:
-    build: ./requirements/Wordpress
+    build: ./requirements/wordpress
     image: wordpress
     container_name: wordpress
     networks:
@@ -31,7 +31,7 @@ services:
     restart: always
 
   mariadb:
-    build: ./requirements/MariaDB
+    build: ./requirements/mariadb
     container_name: mariadb
     image: mariadb
     init: true
@@ -49,8 +49,6 @@ services:
     image: redis
     networks:
       - inception
-    volumes:
-      - rs:/var/www/html
     depends_on:
       - wordpress
     init: true
@@ -113,6 +111,7 @@ services:
 
 networks:
   inception:
+
 volumes:
   wp:
     driver: local
@@ -121,12 +120,6 @@ volumes:
       o: bind
       type: bind
   db:
-    driver: local
-    driver_opts:
-      device: /Users/hhamdy/Desktop/inception/mariadb
-      o: bind
-      type: bind
-  rs:
     driver: local
     driver_opts:
       device: /Users/hhamdy/Desktop/inception/mariadb
