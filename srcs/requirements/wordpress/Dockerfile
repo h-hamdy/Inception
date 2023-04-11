@@ -12,7 +12,7 @@ RUN wget https://wordpress.org/latest.zip && unzip latest.zip
 
 RUN rm -f latest.zip
 
-COPY conf/db.sh .
+COPY tools/db.sh .
 
 RUN	chmod +x db.sh
 
@@ -23,5 +23,3 @@ COPY conf/wp-config.php .
 RUN service php7.3-fpm start
 
 ENTRYPOINT [ "sh", "db.sh" ]
-
-#CMD ["/usr/sbin/php-fpm7.3", "-F", "-R"]

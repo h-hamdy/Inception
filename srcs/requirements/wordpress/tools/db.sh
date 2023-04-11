@@ -9,7 +9,7 @@ curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.pha
 chmod +x wp-cli.phar
 mv wp-cli.phar /usr/local/bin/wp
 
-wp core install --url=localhost --title=simple_title --admin_user=$MYSQL_USER --admin_password=1234 --admin_email=houssamhamdy223@gmail.com --skip-email --allow-root --path=wordpress
+wp core install --url=$DOMAIN_NAME --title=my_website --admin_user=$MYSQL_USER --admin_password=$MYSQL_PASSWORD --admin_email=houssamhamdy223@gmail.com --skip-email --allow-root --path=wordpress
 wp user create user houssamhamdy223@gmail.com --role=author --user_pass=1234 --allow-root --path=wordpress
 
 wp plugin install redis-cache --activate --allow-root --path=wordpress
