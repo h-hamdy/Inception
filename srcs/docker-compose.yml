@@ -12,7 +12,6 @@ services:
       - inception
     depends_on:
        - wordpress
-    init: true
     restart: always
 
   wordpress:
@@ -27,14 +26,12 @@ services:
     - .env
     depends_on:
         - mariadb
-    init: true
     restart: always
 
   mariadb:
     build: ./requirements/mariadb
     container_name: mariadb
     image: mariadb
-    init: true
     networks:
       - inception
     volumes:
@@ -51,7 +48,6 @@ services:
       - inception
     depends_on:
       - wordpress
-    init: true
     restart: always
   
   adminer:
@@ -64,7 +60,6 @@ services:
       - mariadb
     ports:
       - 8000:8000
-    init: true
     restart: always
 
   cadvisor:
@@ -116,12 +111,12 @@ volumes:
   wp:
     driver: local
     driver_opts:
-      device: /Users/hhamdy/Desktop/inception/volumes
+      device: /home/hhamdy/wordpress
       o: bind
       type: bind
   db:
     driver: local
     driver_opts:
-      device: /Users/hhamdy/Desktop/inception/mariadb
+      device: /home/hhamdy/mariadb
       o: bind
       type: bind
